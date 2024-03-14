@@ -1,5 +1,6 @@
 from flask import Flask, request
 import json
+from config import db
 
 app = Flask(__name__) #__name__ < use name of the folder
 
@@ -30,11 +31,15 @@ def get_products():
 
     return json.dumps(products)
 
+def fix_id(obj):
+    obj["_id"]=str(obj["_id"])
+    return obj
+
 @app.post("/api/products")
 def save_products():
     products = request.get_json()
     print (products)
-    products.append(products)
+    db.products.insert_one(products)
     return json.dumps(products)
 
 
